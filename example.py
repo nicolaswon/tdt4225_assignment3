@@ -1,5 +1,5 @@
 from pprint import pprint 
-from db_connector import DbConnector
+from DbConnector import DbConnector
 
 
 class ExampleProgram:
@@ -14,31 +14,63 @@ class ExampleProgram:
         print('Created collection: ', collection)
 
     def insert_documents(self, collection_name):
-        docs = [
+         # Dummy user data
+        users = [
             {
-                "_id": 1,
-                "name": "Bobby",
-                "courses": 
-                    [
-                    {'code':'TDT4225', 'name': ' Very Large, Distributed Data Volumes'},
-                    {'code':'BOI1001', 'name': ' How to become a boi or boierinnaa'}
-                    ] 
+                "user_id": 1,
+                "has_label": True,
+                "activities": [12345, 23456, 34567]
             },
             {
-                "_id": 2,
-                "name": "Bobby",
-                "courses": 
-                    [
-                    {'code':'TDT02', 'name': ' Advanced, Distributed Systems'},
-                    ] 
-            },
-            {
-                "_id": 3,
-                "name": "Bobby",
+                "user_id": 2,
+                "has_label": False,
+                "activities": [67890, 78901]
             }
-        ]  
+            # Add more user data as needed
+        ]
+
+        # Dummy activity data
+        activities = [
+            {
+                "transport_mode": "walk",
+                "start_date_time": "2021-10-15 10:00:00",
+                "end_date_time": "2021-10-15 12:00:00",
+                "user_id": 1
+            },
+            {
+                "transport_mode": "car",
+                "start_date_time": "2021-10-16 15:00:00",
+                "end_date_time": "2021-10-16 16:30:00",
+                "user_id": 2
+            }
+            # Add more activity data as needed
+        ]
+
+        # Dummy trackpoint data
+        trackpoints = [
+            {
+                "lat": 10,
+                "lon": 11,
+                "altitude": 123,
+                "date_time": "2021-10-15 10:30:00",
+                "user_id": 1,
+                "activity": 12345
+            },
+            {
+                "lat": 15,
+                "lon": 18,
+                "altitude": 100,
+                "date_time": "2021-10-16 15:15:00",
+                "user_id": 2,
+                "activity": 67890
+            }
+            # Add more trackpoint data as needed
+        ]
+
         collection = self.db[collection_name]
-        collection.insert_many(docs)
+        #collection.insert_many(users)
+        collection.insert_many(activities)
+        #collection.insert_many(trackpoints)
         
     def fetch_documents(self, collection_name):
         collection = self.db[collection_name]
@@ -62,13 +94,11 @@ def main():
     program = None
     try:
         program = ExampleProgram()
-        program.create_coll(collection_name="Person")
+        program.create_coll(collection_name="activities")
         program.show_coll()
-        program.insert_documents(collection_name="Person")
-        program.fetch_documents(collection_name="Person")
-        program.drop_coll(collection_name="Person")
-        # program.drop_coll(collection_name='person')
-        # program.drop_coll(collection_name='users')
+        program.insert_documents(collection_name="activities")
+        program.fetch_documents(collection_name="activities")
+        #program.drop_coll(collection_name="activities")
         # Check that the table is dropped
         program.show_coll()
     except Exception as e:
