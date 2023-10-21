@@ -89,6 +89,10 @@ track_point_validator = {
                 "bsonType": "date",
                 "description": "date time"
             },
+            "prev_date_time": {
+                "bsonType": ["date", "null"],
+                "description": "previous date time"
+            },
             "transportation_mode": {
                 "bsonType": ["string", "null"],
                 "description": "transportation mode"
