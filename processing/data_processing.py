@@ -3,6 +3,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 from processing.helpers import process_track_points, find_removed_users, haversine
 from bson import ObjectId
+import numpy as np
 
 from collections.abc import Callable
 
@@ -180,7 +181,10 @@ def make_track_point_df(track_points_df, activities_df):
     int_df = track_points_df.drop(["activity", "user"], axis=1)
     cleaned_df = process_dataframe(int_df, haversine)
     result_df = cleaned_df.merge(activities_df, left_on=['activity_id'], right_on=['_id'])
-    result_df = result_df[['user_id', 'activity_id', 'lat', 'lon', 'altitude', 'date_days', 'date_time', 'transportation_mode']]
+    result_df.sort_values(['activity_id', 'date_time'], inplace=True)
+    result_df['prev_date_time'] = result_df.groupby('activity_id')['date_time'].shift(1)
+    result_df['prev_date_time'].replace({np.nan: None}, inplace=True)
+    result_df = result_df[['user_id', 'activity_id', 'lat', 'lon', 'altitude', 'date_days', 'date_time', 'transportation_mode', 'prev_date_time']]
     return result_df
 
 def make_user_dict(user_table, activities_table):
