@@ -96,8 +96,6 @@ track_point_validator = {
             "transportation_mode": {
                 "bsonType": ["string", "null"],
                 "description": "transportation mode"
-                # You can uncomment the following line if you want to restrict the transportation modes
-                # "enum": ["walk", "car", "bike", "bus", "airplane", "boat", "train"]
             }
         }
     }
