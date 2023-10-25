@@ -190,21 +190,14 @@ def make_track_point_df(track_points_df, activities_df):
 def make_user_dict(user_table, activities_table):
     user_dict = user_table.to_dict('records')
     [user.update({'activities': list(activities_table.loc[activities_table['user_id'] == user['_id'], '_id'].unique())}) for user in user_dict]
-    # for user in user_dict:
-    #     unique_ids = activities_table.loc[activities_table['user_id'] == user['_id'], '_id'].unique()
-    #     user['activities'] = [ObjectId(activity_id) for activity_id in unique_ids]
     return user_dict
 
 def make_activity_dict(activity_table):
-    # activity_table['user_id'] = activity_table['user_id'].apply(ObjectId)
     activity_dict = activity_table.to_dict('records')
     return activity_dict
 
 def make_track_point_dict(track_point_table):
     track_point_table['location'] = track_point_table.apply(lambda row: {"type": "Point", "coordinates": [row['lon'], row['lat']]}, axis=1)
     track_point_table.drop(columns=['lon', 'lat'], inplace=True)
-    
-    # track_point_table['user_id'] = track_point_table['user_id'].apply(ObjectId)
-    # track_point_table['activity_id'] = track_point_table['activity_id'].apply(ObjectId)
     track_point_dict = track_point_table.to_dict('records')
     return track_point_dict
